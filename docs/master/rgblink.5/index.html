@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="generator" content="Docusaurus v2.0.0-beta.21">
 <link rel="search" type="application/opensearchdescription+xml" title="RGBDS" href="/opensearch.xml"><title data-rh="true">rgblink(5) — linker script file format | RGBDS</title><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://rgbds.gbdev.io/docs/master/rgblink.5"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="og:image" content="https://rgbds.gbdev.io/img/logo.png"><meta data-rh="true" name="og:image:width" content="128"><meta data-rh="true" name="og:image:height" content="128"><meta data-rh="true" name="og:image:alt" content="RGBDS&#x27; logo"><meta data-rh="true" name="twitter:site" content="@gbdev0"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="rgblink(5) — linker script file format | RGBDS"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://rgbds.gbdev.io/docs/master/rgblink.5"><link data-rh="true" rel="alternate" href="https://rgbds.gbdev.io/docs/master/rgblink.5" hreflang="en"><link data-rh="true" rel="alternate" href="https://rgbds.gbdev.io/docs/master/rgblink.5" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://1P240E1YI0-dsn.algolia.net" crossorigin="anonymous"><link rel="stylesheet" href="/assets/css/styles.73763ed9.css">
-<link rel="preload" href="/assets/js/runtime~main.b1b4ea1a.js" as="script">
+<link rel="preload" href="/assets/js/runtime~main.f7b9fb21.js" as="script">
 <link rel="preload" href="/assets/js/main.afa5dcd3.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
@@ -14,18 +14,22 @@
 <h2 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h2>
 <p class="Pp">The linker script is an external file that allows the user to
     specify the order of sections at link time and in a centralized manner.</p>
-<p class="Pp">A linker script consists on a series of banks followed by a list
-    of sections and, optionally, commands. They can be lowercase or uppercase,
-    it is ignored. Any line can contain a comment starting with
+<p class="Pp">A linker script consists of a series of bank declarations, each
+    optionally followed by a list of section names (in double quotes) or
+    commands. All reserved keywords (bank types and command names) are
+    case-insensitive; all section names are case-sensitive.</p>
+<p class="Pp">Any line can contain a comment starting with
     &#x2018;<code class="Li">;</code>&#x2019; that ends at the end of the
-  line:</p>
+  line.</p>
 <div class="Bd Pp Bd-indent Li">
-<pre>ROMX $F ; This is a comment
-  &quot;Functions to read array&quot;
-  ALIGN 8
-  &quot;Array aligned to 256 bytes&quot;
+<pre>; This line is a comment
+ROMX $F            ; start a bank
+  &quot;Some functions&quot; ; a section name
+  ALIGN 8          ; a command
+  &quot;Some array&quot;
 
-WRAMX 2
+WRAMX 2            ; start another bank
+  org $d123        ; another command
   &quot;Some variables&quot;</pre>
 </div>
 <p class="Pp">Numbers can be in decimal or hexadecimal format (the prefix is
@@ -42,6 +46,15 @@ WRAMX 2
     with types <code class="Cm">ROMX</code>, <code class="Cm">VRAM</code>,
     <code class="Cm">SRAM</code> and <code class="Cm">WRAMX</code>, it is needed
     to specify a bank number after the type.</p>
+<p class="Pp">Section names in double quotes support the same character escape
+    sequences as strings in <a class="Xr" href="./rgbasm.5">rgbasm(5)</a>,
+    specifically &#x2018;<code class="Li">\\</code>&#x2019;,
+    &#x2018;<code class="Li">\&quot;</code>&#x2019;,
+    &#x2018;<code class="Li">\n</code>&#x2019;,
+    &#x2018;<code class="Li">\r</code>&#x2019;, and
+    &#x2018;<code class="Li">\t</code>&#x2019;. Other backslash escape sequences
+    in <a class="Xr" href="./rgbasm.5">rgbasm(5)</a> are only relevant to
+    assembly code and do not apply in section names.</p>
 <p class="Pp">When a new bank statement is found, sections found after it will
     be placed right from the beginning of that bank. If the linker script
     switches to a different bank and then comes back to a previous one, it will
@@ -83,7 +96,7 @@ WRAMX 2
     <a class="Lk" href="https://github.com/gbdev/rgbds">https://github.com/gbdev/rgbds</a>.</p>
 </section>
 </div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="theme-doc-footer-edit-meta-row row"><div class="col"><a href="https://github.com/gbdev/rgbds/edit/master/man/rgblink.5" target="_blank" rel="noreferrer noopener" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_eYIM" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_vbeJ"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages navigation"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/master/gbz80.7"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">gbz80(7) — CPU opcode reference</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/master/rgbds.5"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">rgbds(5) — object file format documentation</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#DESCRIPTION" class="table-of-contents__link toc-highlight">DESCRIPTION</a></li><li><a href="#SEE_ALSO" class="table-of-contents__link toc-highlight">SEE ALSO</a></li><li><a href="#HISTORY" class="table-of-contents__link toc-highlight">HISTORY</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://eldred.fr/gb-asm-tutorial/" target="_blank" rel="noopener noreferrer" class="footer__link-item">GB ASM Tutorial<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://gbdev.io/pandocs" target="_blank" rel="noopener noreferrer" class="footer__link-item">Game Boy technical reference<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://discord.io/gbdev" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://twitter.com/gbdev0" target="_blank" rel="noopener noreferrer" class="footer__link-item">Twitter<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://hh.gbdev.io/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Homebrew Games<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://gbdev.io/resources.html" target="_blank" rel="noopener noreferrer" class="footer__link-item">Game Boy Development resources<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Game Boy is a registered trademark. This project is not endorsed by Nintendo.<br> Copyright © 1997-2022 RGBDS contributors.</div></div></div></footer></div>
-<script src="/assets/js/runtime~main.b1b4ea1a.js"></script>
+<script src="/assets/js/runtime~main.f7b9fb21.js"></script>
 <script src="/assets/js/main.afa5dcd3.js"></script>
 </body>
 </html>
