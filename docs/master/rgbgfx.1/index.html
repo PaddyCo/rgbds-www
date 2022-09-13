@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="generator" content="Docusaurus v2.0.0-beta.21">
 <link rel="search" type="application/opensearchdescription+xml" title="RGBDS" href="/opensearch.xml"><title data-rh="true">rgbgfx(1) — Game Boy graphics converter | RGBDS</title><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://rgbds.gbdev.io/docs/master/rgbgfx.1"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="og:image" content="https://rgbds.gbdev.io/img/logo.png"><meta data-rh="true" name="og:image:width" content="128"><meta data-rh="true" name="og:image:height" content="128"><meta data-rh="true" name="og:image:alt" content="RGBDS&#x27; logo"><meta data-rh="true" name="twitter:site" content="@gbdev0"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="rgbgfx(1) — Game Boy graphics converter | RGBDS"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://rgbds.gbdev.io/docs/master/rgbgfx.1"><link data-rh="true" rel="alternate" href="https://rgbds.gbdev.io/docs/master/rgbgfx.1" hreflang="en"><link data-rh="true" rel="alternate" href="https://rgbds.gbdev.io/docs/master/rgbgfx.1" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://1P240E1YI0-dsn.algolia.net" crossorigin="anonymous"><link rel="stylesheet" href="/assets/css/styles.73763ed9.css">
-<link rel="preload" href="/assets/js/runtime~main.82d600d2.js" as="script">
+<link rel="preload" href="/assets/js/runtime~main.7adb9759.js" as="script">
 <link rel="preload" href="/assets/js/main.afa5dcd3.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
@@ -321,7 +321,21 @@
     rest of the argument (without the @, that is) is interpreted as the path to
     a file, whose contents are interpreted as if given on the command line.
     At-files can be stored right next to the corresponding image, for
-  example.</p>
+  example:</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent"><code class="Li">$ rgbgfx -o image.2bpp -t
+  image.tilemap @image.flags image.png</code></div>
+<p class="Pp">This will read additional flags from file
+    &#x2018;<code class="Li">image.flags</code>&#x2019;, which could contains
+    for example &#x2018;<code class="Li">-b 128</code>&#x2019; to specify a base
+    offset for the image's tiles. The above command could be generated from the
+    following
+    <a class="Xr" href="https://man7.org/linux/man-pages/man1/make.1.html">make(1)</a>
+    rule, for example:</p>
+<div class="Bd Pp Bd-indent Li">
+<pre>%.2bpp %.tilemap: %.flags %.png
+	rgbgfx -o $*.2bpp -t $*.tilemap @$*.flags $*.png</pre>
+</div>
 <p class="Pp" id="no">Since the contents of at-files are interpreted by
     <code class="Nm">rgbgfx</code>,
     <a class="permalink" href="#no"><b class="Sy">no shell processing is
@@ -333,16 +347,16 @@
     by whitespace, are considered comments and also ignored. Each line can
     contain any number of arguments, which are separated by whitespace. (No
     quoting feature to prevent this is provided.)</p>
-<p class="Pp">Note that this special meaning given to arguments has less
-    precedence than option arguments, and that the standard
+<p class="Pp">Note that a leading &#x2018;<code class="Li">@</code>&#x2019; has
+    no special meaning on option arguments, and that the standard
     &#x2018;<code class="Li">--</code>&#x2019; to stop option processing also
-    disables at-file processing. For example, the following command line
-    processes &#x2018;<code class="Li">@tilesets/town.png</code>&#x2019;,
-    outputs tile data to
-    &#x2018;<code class="Li">@tilesets/town.2bpp</code>&#x2019;, and reads
+    disables at-file processing. For example, the following command line reads
     command-line options from
     &#x2018;<code class="Li">tilesets/town.flags</code>&#x2019; then
-    &#x2018;<code class="Li">tilesets.flags</code>&#x2019;:</p>
+    &#x2018;<code class="Li">tilesets.flags</code>&#x2019;, but processes
+    &#x2018;<code class="Li">@tilesets/town.png</code>&#x2019; as the input
+    image and outputs tile data to
+    &#x2018;<code class="Li">@tilesets/town.2bpp</code>&#x2019;:</p>
 <p class="Pp"></p>
 <div class="Bd Bd-indent"><code class="Li">$ rgbgfx -o @tilesets/town.2bpp
   @tilesets/town.flags @tilesets.flags -- @tilesets/town.png</code></div>
@@ -628,7 +642,7 @@
     <a class="Lk" href="https://github.com/gbdev/rgbds">https://github.com/gbdev/rgbds</a>.</p>
 </section>
 </div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="theme-doc-footer-edit-meta-row row"><div class="col"><a href="https://github.com/gbdev/rgbds/edit/master/man/rgbgfx.1" target="_blank" rel="noreferrer noopener" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_eYIM" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_vbeJ"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages navigation"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/master/rgbfix.1"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">rgbfix(1) — Game Boy header utility and checksum fixer</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/master/rgbds.7"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">rgbds(7) — Rednex Game Boy Development System</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#SYNOPSIS" class="table-of-contents__link toc-highlight">SYNOPSIS</a></li><li><a href="#DESCRIPTION" class="table-of-contents__link toc-highlight">DESCRIPTION</a></li><li><a href="#ARGUMENTS" class="table-of-contents__link toc-highlight">ARGUMENTS</a></li><li><a href="#PALETTE_SPECIFICATION_FORMATS" class="table-of-contents__link toc-highlight">PALETTE SPECIFICATION FORMATS</a></li><li><a href="#PALETTE_GENERATION" class="table-of-contents__link toc-highlight">PALETTE GENERATION</a></li><li><a href="#OUTPUT_FILES" class="table-of-contents__link toc-highlight">OUTPUT FILES</a></li><li><a href="#REVERSE_MODE" class="table-of-contents__link toc-highlight">REVERSE MODE</a></li><li><a href="#NOTES" class="table-of-contents__link toc-highlight">NOTES</a></li><li><a href="#EXAMPLES" class="table-of-contents__link toc-highlight">EXAMPLES</a></li><li><a href="#BUGS" class="table-of-contents__link toc-highlight">BUGS</a></li><li><a href="#SEE_ALSO" class="table-of-contents__link toc-highlight">SEE ALSO</a></li><li><a href="#HISTORY" class="table-of-contents__link toc-highlight">HISTORY</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://eldred.fr/gb-asm-tutorial/" target="_blank" rel="noopener noreferrer" class="footer__link-item">GB ASM Tutorial<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://gbdev.io/pandocs" target="_blank" rel="noopener noreferrer" class="footer__link-item">Game Boy technical reference<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://discord.io/gbdev" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://twitter.com/gbdev0" target="_blank" rel="noopener noreferrer" class="footer__link-item">Twitter<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://hh.gbdev.io/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Homebrew Games<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://gbdev.io/resources.html" target="_blank" rel="noopener noreferrer" class="footer__link-item">Game Boy Development resources<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_lCJq"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Game Boy is a registered trademark. This project is not endorsed by Nintendo.<br> Copyright © 1997-2022 RGBDS contributors.</div></div></div></footer></div>
-<script src="/assets/js/runtime~main.82d600d2.js"></script>
+<script src="/assets/js/runtime~main.7adb9759.js"></script>
 <script src="/assets/js/main.afa5dcd3.js"></script>
 </body>
 </html>
